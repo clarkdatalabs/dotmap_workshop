@@ -138,8 +138,8 @@ draw.tile =function(quadkey){
 
   quad.coord$quadshort =  substring(quad.coord$quadkey,1,zoomlevel)
 
-	quad.coord[quad.coord$quadshort == quadkey]$px = (coords$mx/A - tile_ll) * scale
-	quad.coord[quad.coord$quadshort == quadkey]$py = (coords$my/A - tile_tt) * -scale
+	quad.coord[quad.coord$quadshort == quadkey,]$px = (coords$mx/A - tile_ll) * scale
+	quad.coord[quad.coord$quadshort == quadkey,]$py = (coords$my/A - tile_tt) * -scale
 	
 	dir.create(paste(zoomlevel,"/",sep=""),showWarnings=FALSE)
 	dir.create(paste(zoomlevel,"/",tms_tile[1],"/",sep=""),showWarnings=FALSE)

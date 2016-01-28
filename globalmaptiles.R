@@ -118,22 +118,11 @@ tilebounds = function(tileX, tileY, levelofDetail,orgiin.shift){
 	return(c(ll[1],ll[2],ur[1],ur[2]))
 }
 
-# Draw tiles from quadkey reference
-draw.tiles = function(quad.coord){
-  zoomlevels = c(2,3,4,5,6,7,8,9,10)
-  for (i in zoomlevels){
-  	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
-  	quadlevel = unique(quad.coord$quadzoom)
-  	print(quadlevel)
-  	for (j in quadlevel){
-  		draw.tile(j,quad.coord[quad.coord$quadzoom==j,],i,origin.shift)
-  	}
-  }
-}
 
-draw.tile =function(quadkey, coords, zoomlevel,origin.shift){
+draw.tile =function(quadkey){
 	A = 1000	
 	width = 512
+  zoomlevel=nchar(quadkey)
 	google_tile = quadkeytoTiles(quadkey)
 	tms_tile = googleTiles(google_tile,zoomlevel)
 	bounds = tilebounds(tms_tile[1],tms_tile[2],zoomlevel,origin.shift)
@@ -147,8 +136,10 @@ draw.tile =function(quadkey, coords, zoomlevel,origin.shift){
 	yscale = width/(tile_tt - tile_bb)
 	scale = min(c(xscale,yscale))
 
-	coords$px = (coords$mx/A - tile_ll) * scale
-	coords$py = (coords$my/A - tile_tt) * -scale
+  quad.coord$quadshort =  substring(quad.coord$quadkey,1,zoomlevel)
+
+	quad.coord[quad.coord$quadshort = quadkey]$px = (coords$mx/A - tile_ll) * scale
+	quad.coord[quad.coord$quadshort = quadkey]$py = (coords$my/A - tile_tt) * -scale
 	
 	dir.create(paste(zoomlevel,"/",sep=""),showWarnings=FALSE)
 	dir.create(paste(zoomlevel,"/",tms_tile[1],"/",sep=""),showWarnings=FALSE)

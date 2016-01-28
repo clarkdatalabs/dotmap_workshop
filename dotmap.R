@@ -48,6 +48,12 @@ quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
 #4. Combine meter coordinates with quadkey values
 quad.coord= cbind(quadkey, meters)
 #5 draw tiles
-draw.tiles(quad.coord)
+zoomlevels = c(2,3,4,5,6,7,8,9,10)
+for (i in zoomlevels){
+  	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
+  	quadlevel = unique(quad.coord$quadzoom)
+  	print(quadlevel)
+  	lapply(quadlevel,draw.tile)
+}
 
 

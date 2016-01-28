@@ -6,7 +6,7 @@
 # created by: Soon Ju Kim and Justin Joque, University of Michigan
 
 ## Source global map tiles functions
-source("globalmaptiles.r")
+source("globalmaptiles.R")
 ## Check if packages exist and download them 
 if(!(require(maptools))){
   install.packages("maptools");
@@ -29,6 +29,7 @@ library("maptools")
 library("sp")
 library("rgeos")
 library("rgdal")
+library("parallel")
 
 ## 2. Read shape, output data with coordinates and quadkey reference 
 # Read zoom level (zoom levels should be from 4 to 13)
@@ -48,12 +49,12 @@ quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
 #4. Combine meter coordinates with quadkey values
 quad.coord= cbind(quadkey, meters)
 #5 draw tiles
-zoomlevels = c(2,3,4,5,6,7,8,9,10)
+zoomlevels = c(2:14)
 for (i in zoomlevels){
   	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
   	quadlevel = unique(quad.coord$quadzoom)
   	print(quadlevel)
-  	lapply(quadlevel,draw.tile)
+  	mclapply(quadlevel,draw.tile)
 }
 
 

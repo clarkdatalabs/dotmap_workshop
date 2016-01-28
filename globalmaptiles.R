@@ -120,32 +120,32 @@ tilebounds = function(tileX, tileY, levelofDetail,orgiin.shift){
 
 
 draw.tile =function(quadkey){
-	A = 1000	
-	width = 512
+  A = 1000	
+  width = 512
   zoomlevel=nchar(quadkey)
-	google_tile = quadkeytoTiles(quadkey)
-	tms_tile = googleTiles(google_tile,zoomlevel)
-	bounds = tilebounds(tms_tile[1],tms_tile[2],zoomlevel,origin.shift)
-	
-	tile_ll = bounds[1] / A
-	tile_bb = bounds[2] / A
-	tile_rr = bounds[3] / A
-	tile_tt = bounds[4] / A
-	
-	xscale = width/(tile_rr - tile_ll)
-	yscale = width/(tile_tt - tile_bb)
-	scale = min(c(xscale,yscale))
+  google_tile = quadkeytoTiles(quadkey)
+  tms_tile = googleTiles(google_tile,zoomlevel)
+  bounds = tilebounds(tms_tile[1],tms_tile[2],zoomlevel,origin.shift)
+
+  tile_ll = bounds[1] / A
+  tile_bb = bounds[2] / A
+  tile_rr = bounds[3] / A
+  tile_tt = bounds[4] / A
+
+  xscale = width/(tile_rr - tile_ll)
+  yscale = width/(tile_tt - tile_bb)
+  scale = min(c(xscale,yscale))
 
   quad.coord$quadshort =  substring(quad.coord$quadkey,1,zoomlevel)
 
-	quad.coord[quad.coord$quadshort == quadkey,]$px = (coords$mx/A - tile_ll) * scale
-	quad.coord[quad.coord$quadshort == quadkey,]$py = (coords$my/A - tile_tt) * -scale
-	
-	dir.create(paste(zoomlevel,"/",sep=""),showWarnings=FALSE)
-	dir.create(paste(zoomlevel,"/",tms_tile[1],"/",sep=""),showWarnings=FALSE)
-	png(file = paste(zoomlevel,"/",tms_tile[1],"/",tms_tile[2],".png",sep=""), width=512, height=512, bg = "transparent")
+  quad.coord[quad.coord$quadshort == quadkey,]$px = (coords$mx/A - tile_ll) * scale
+  quad.coord[quad.coord$quadshort == quadkey,]$py = (coords$my/A - tile_tt) * -scale
+
+  dir.create(paste(zoomlevel,"/",sep=""),showWarnings=FALSE)
+  dir.create(paste(zoomlevel,"/",tms_tile[1],"/",sep=""),showWarnings=FALSE)
+  png(file = paste(zoomlevel,"/",tms_tile[1],"/",tms_tile[2],".png",sep=""), width=512, height=512, bg = "transparent")
   #plot to the corners
-	par(mar=c(0,0,0,0))
-	plot(coords$px,coords$py,pch=20,cex=1,xlim=c(1,512),ylim=c(512,1),xaxs="i",yaxs="i")
-	dev.off()
+  par(mar=c(0,0,0,0))
+  plot(coords$px,coords$py,pch=20,cex=1,xlim=c(1,512),ylim=c(512,1),xaxs="i",yaxs="i")
+  dev.off()
 }

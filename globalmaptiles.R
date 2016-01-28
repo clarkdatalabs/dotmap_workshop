@@ -147,6 +147,6 @@ draw.tile =function(quadkey){
   png(file = paste(zoomlevel,"/",tms_tile[1],"/",tms_tile[2],".png",sep=""), width=512, height=512, bg = "transparent")
   #plot to the corners
   par(mar=c(0,0,0,0))
-  plot(coords$px,coords$py,pch=20,cex=1,xlim=c(1,512),ylim=c(512,1),xaxs="i",yaxs="i")
+  plot(coords$mx,coords$my,pch=20,cex=1,xlim=c(1,512),ylim=c(512,1),xaxs="i",yaxs="i")
   dev.off()
 }

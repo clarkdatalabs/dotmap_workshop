@@ -33,11 +33,10 @@ library("parallel")
 
 ## 2. Read shape, output data with coordinates and quadkey reference 
 # Read zoom level (zoom levels should be from 4 to 13)
-
 zoom= 14;
 # Convert coordinates to quadkey
 shape1= readShapeSpatial("vermont/tabblock2010_50_pophu.shp")
-shape= shape1[1:200,];
+shape= shape1[1:100,];
 #1. Obtain Coordinates 
 coords= totalcoordstate(shape); 
 #2. Convert to Tiles
@@ -47,14 +46,14 @@ tiles= pixelstoTiles(pixels, tile.size);
 #3. Convert to Google Quadkey
 quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
 #4. Combine meter coordinates with quadkey values
-quad.coord= cbind(quadkey, meters)
+quad.coord= data.frame(quadkey, meters$mx, meters$my)
 #5 draw tiles
-zoomlevels = c(2:14)
+zoomlevels = c(2:10)
 for (i in zoomlevels){
   	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
   	quadlevel = unique(quad.coord$quadzoom)
   	print(quadlevel)
-  	mclapply(quadlevel,draw.tile)
+  	lapply(quadlevel,draw.tile)
 }
 
 

@@ -30,6 +30,7 @@ library("sp")
 library("rgeos")
 library("rgdal")
 library("parallel")
+library("Cairo")
 
 ## 2. Read shape, output data with coordinates and quadkey reference 
 # Read zoom level (zoom levels should be from 4 to 13)
@@ -43,17 +44,17 @@ coords= totalcoordstate(shape);
 meters= coordstoMeters(coords, origin.shift); 
 pixels= meterstoPixels(meters, zoom, origin.shift);
 tiles= pixelstoTiles(pixels, tile.size); 
-#3. Convert to Google Quadkey
+#3. Convert to Microso Quadkey
 quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
 #4. Combine meter coordinates with quadkey values
 quad.coord= data.frame(quadkey, meters$mx, meters$my)
 #5 draw tiles
-zoomlevels = c(2:10)
+zoomlevels = c(2:14)
 for (i in zoomlevels){
   	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
   	quadlevel = unique(quad.coord$quadzoom)
-  	print(quadlevel)
-  	lapply(quadlevel,draw.tile)
+  	print(i)
+  	mclapply(quadlevel,draw.tile)
 }
 
 

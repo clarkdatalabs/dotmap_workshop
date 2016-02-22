@@ -5,25 +5,8 @@
 # an R implementation of https://github.com/unorthodox123/RacialDotMap
 # created by: Soon Ju Kim and Justin Joque, University of Michigan
 
-## Source global map tiles functions
-source("globalmaptiles.R")
-## Check if packages exist and download them 
-if(!(require(maptools))){
-  install.packages("maptools");
-  require(maptools);
-}
-if(!(require(sp))){
-  install.packages("sp");
-  require(sp);
-}
-if(!(require(rgeos))){
-  install.packages("rgeos");
-  require(rgeos);
-}
-if(!(require(rgdal))){
-  install.packages("rgdal");
-  require(rgdal);
-}
+
+
 ## Load package libraries 
 library("maptools")
 library("sp")
@@ -32,9 +15,13 @@ library("rgdal")
 library("parallel")
 library("Cairo")
 
+## Source global map tiles functions
+source("globalmaptiles.R")
+
+
 ## 2. Read shape, output data with coordinates and quadkey reference 
-# Read zoom level (zoom levels should be from 4 to 13)
-zoom= 14;
+# Set the maximum zoom level
+zoom = 13;
 # Convert coordinates to quadkey
 shape1= readShapeSpatial("vermont/tabblock2010_50_pophu.shp")
 shape= shape1[1:100,];
@@ -49,7 +36,7 @@ quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
 #4. Combine meter coordinates with quadkey values
 quad.coord= data.frame(quadkey, meters$mx, meters$my)
 #5 draw tiles
-zoomlevels = c(2:14)
+zoomlevels = c(2:10)
 for (i in zoomlevels){
   	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
   	quadlevel = unique(quad.coord$quadzoom)

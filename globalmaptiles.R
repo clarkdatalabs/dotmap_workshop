@@ -109,18 +109,6 @@ tilebounds = function(tileX, tileY, levelofDetail,orgiin.shift){
 }
 
 # Draw tiles from quadkey reference
-draw.tiles = function(quad.coord){
-  zoomlevels = c(2,3,4,5,6,7,8,9,10)
-  for (i in zoomlevels){
-  	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
-  	quadlevel = unique(quad.coord$quadzoom)
-  	print(quadlevel)
-  	for (j in quadlevel){
-  		draw.tile(j,quad.coord[quad.coord$quadzoom==j,],i,origin.shift)
-  	}
-  }
-}
-
 draw.tile =function(quadkey){
   A = 1000	
   width = 512
@@ -150,6 +138,16 @@ draw.tile =function(quadkey){
   CairoPNG(file = paste(zoomlevel,"/",tms_tile[1],"/",tms_tile[2],".png",sep=""), width=512, height=512, bg = "transparent")
   #plot to the corners
   par(mar=c(0,0,0,0))
-  plot(coords$mx,coords$my,pch=20,cex=1,xlim=c(1,512),ylim=c(512,1),xaxs="i",yaxs="i")
+  plot(coords$mx,coords$my,pch=20,xlim=c(1,512),ylim=c(512,1),cex=dot_size(zoomlevel),col=rgb(0,0,0,dot_opac(zoomlevel)/255), axes=FALSE,xaxs="i",yaxs="i",bty="n")
   dev.off()
+}
+
+dot_size <- function(zoom) {
+  switch(as.character(zoom),
+         "4"=0.1,"5"=0.1,"6"=0.1,"7" = 0.1,"8"=0.1,"9"=0.2,"10"=0.2,"11"=0.2,"12"=0.2,"13"=0.2,"14"=0.2)
+}
+
+dot_opac <- function(zoom) {
+  switch(as.character(zoom),
+         "4"=153,"5"=153,"6"=179,"7" = 179,"8"=204,"9"=204,"10"=230,"11"=230,"12"=255,"13"=255,"14"=255)
 }

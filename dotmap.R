@@ -41,7 +41,7 @@ for (i in zoomlevels){
   	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
   	quadlevel = unique(quad.coord$quadzoom)
   	print(i)
-  	mclapply(quadlevel,draw.tile)
+  	lapply(quadlevel,draw.tile)
 }
 
 

@@ -6,6 +6,14 @@
 # an R implementation of https://github.com/unorthodox123/RacialDotMap
 # created by: Soon Ju Kim and Justin Joque, University of Michigan
 
+## load library
+library(parallel)
+
+# For multicore, get number of cores from PBS or set manually
+# NP = as.numeric(Sys.getenv('PBS_NP'))
+NP = 10
+options(mc.cores=NP)
+
 begin = Sys.time()
 ## Source global map tiles functions, includes library load statements
 source("globalmaptiles.R")
@@ -26,7 +34,7 @@ coords= totalcoordstate(shape);
 meters= coordstoMeters(coords, origin.shift); 
 pixels= meterstoPixels(meters, zoom, origin.shift);
 tiles= pixelstoTiles(pixels, tile.size);
-
+ 
 ## Convert to Microso Quadkey
 quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
 
@@ -45,7 +53,7 @@ for (i in zoomlevels){
   	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
   	quadlevel = unique(quad.coord$quadzoom)
   	print(i)
-  	lapply(quadlevel,draw.tile)
+  	mclapply(quadlevel,draw.tile)
 }
 
 ## Print tile creation time

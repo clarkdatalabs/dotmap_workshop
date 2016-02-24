@@ -1,0 +1,40 @@
+#!/bin/bash
+#### Begin PBS preamble
+
+#PBS -N dotmap-multicore
+#PBS -M <your uniqname>@umich.edu
+#PBS -m ae
+
+#PBS -l nodes=1:ppn=8,mem=2gb,walltime=4:00:00
+
+#PBS -j oe
+#PBS -V
+
+#PBS -A <your account>_flux
+#PBS -l qos=flux
+#PBS -q flux
+
+#### End PBS preamble
+
+#### Job Setup
+#### Modules needed for this job to run successfully
+# module load lsa geos gdal proj4 R
+#
+# also needed
+# Make the Rgeo libraries available
+export R_LIBS_USER=/usr/cac/rhel6/Rgeo/3.2.2
+
+if [ -e "${PBS_NODEFILE}" ] ; then
+    uniq -c $PBS_NODEFILE
+fi
+
+if [ -d "${PBS_O_WORKDIR}" ] ; then
+    cd $PBS_O_WORKDIR
+fi
+
+echo "Working from $(pwd)"
+
+#  Job Run
+
+R CMD BATCH --no-save --no-restore dotmap-mc.R
+

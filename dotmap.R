@@ -15,23 +15,34 @@ zoom = 14;
 
 ## Read shape, output data with coordinates and quadkey reference 
 # Convert coordinates to quadkey
-shape= readShapeSpatial("vermont/tabblock2010_50_pophu.shp")
-# Take a sample for quick testing
-# shape= shape[1:100,];
+print("Reading in shapefiles")
+states = c(33,50)
 
-## Obtain Coordinates
-coords= totalcoordstate(shape);
+for (state in states){
+	shape= readOGR('shapefiles',paste("tabblock2010_",state,"_pophu",sep=""))
+	# Take a sample for quick testing
+	# shape= shape[1:100,];
 
-## Convert to Tiles
-meters= coordstoMeters(coords, origin.shift); 
-pixels= meterstoPixels(meters, zoom, origin.shift);
-tiles= pixelstoTiles(pixels, tile.size);
+	## Obtain Coordinates
+	coords= totalcoordstate(shape);
 
-## Convert to Microso Quadkey
-quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
+	## Convert to Tiles
+	meters= coordstoMeters(coords, origin.shift); 
+	pixels= meterstoPixels(meters, zoom, origin.shift);
+	tiles= pixelstoTiles(pixels, tile.size);
 
-## Combine meter coordinates with quadkey values
-quad.coord= data.frame(quadkey, meters$mx, meters$my)
+	## Convert to Microso Quadkey
+	quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
+
+	## Combine meter coordinates with quadkey values
+	quad.hold= data.frame(quadkey, meters$mx, meters$my)
+	if(exists("quad.coord")){
+		quad.coord = rbind(quad.hold,quad.coord)
+	}else{
+		quad.coord = quad.hold
+	}
+	rm(quad.hold)
+}
 
 ## Print time for processing shape file(s)
 end_shape = Sys.time()
@@ -40,7 +51,7 @@ print("End shape file processing")
 print(shape_time)
 
 ## Draw tiles
-zoomlevels = c(2:14)
+zoomlevels = c(2:5)
 for (i in zoomlevels){
   	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
   	quadlevel = unique(quad.coord$quadzoom)

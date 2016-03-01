@@ -1,0 +1,151 @@
+library(sp)
+counties <- readShapeSpatial("Box Sync/geospatial_R/county_census/County_2010Census_DP1.shp")
+setwd("/Users/joque")
+counties <- readShapeSpatial("Box Sync/geospatial_R/county_census/County_2010Census_DP1.shp")
+library(maptools)
+counties <- readShapeSpatial("Box Sync/geospatial_R/county_census/County_2010Census_DP1.shp")
+fishing <- readShapeSpatial("Box Sync/geospatial_R/michigan_fishing/Michigan_DNR_Fishing_Access_Sites.shp")
+plot(fishing)
+michigan <- counties[substring(counties$GEOID10,1,2)=="26",]
+plot(michigan)
+points(fishing)
+plot(michigan,add=TRUE)
+plot(fishing,add=TRUE)
+plot(fishing)
+print(proj4string(fishing))
+print(proj4string(michigan))
+proj4string(michigan)
+proj4string(counties)
+fishing
+plot(michigan,add=TRUE)
+michigan
+fishing
+fishing <- readShapePoints("Box Sync/geospatial_R/michigan_fishing/Michigan_DNR_Fishing_Access_Sites.shp")
+fishing
+plot(fishing)
+plot(michigan)
+points(fishing)
+fishing@bbox
+michigan@bbox
+EPSG <- make_EPSG()
+library(rgadl)
+library(rgdal)
+EPSG <- make_EPSG()
+EPSG[grep("michigan", EPSG$note, ignore.case=TRUE), 1:2]
+subset(EPSG, code==3078)
+projstring <- subset(EPSG, code==3078)
+projstring
+fishing <- readShapePoints("Box Sync/geospatial_R/michigan_fishing/Michigan_DNR_Fishing_Access_Sites.shp",proj4string = projstring)
+CRS(projstring)
+CRS("+proj=omerc +lat_0=45.30916666666666 +lonc=-86 +alpha=337.25556 +k=0.9996 +x_0=2546731.496 +y_0=-4354009.816 +no_uoff +gamma=337.25556 +datum=NAD83 +units=m +no_defs")
+fishing <- readShapePoints("Box Sync/geospatial_R/michigan_fishing/Michigan_DNR_Fishing_Access_Sites.shp",proj4string = CRS("+proj=omerc +lat_0=45.30916666666666 +lonc=-86 +alpha=337.25556 +k=0.9996 +x_0=2546731.496 +y_0=-4354009.816 +no_uoff +gamma=337.25556 +datum=NAD83 +units=m +no_defs"))
+plot(fishing)
+fishing@bbox
+plot(michigan)
+points(fishing)
+fishing2 <- spTransform(fishing, CRS("+proj=longlat +datum=WGS84"))
+fishing2@bbox
+projstring <- subset(EPSG, code==6497)
+projstring
+fishing <- readShapePoints("Box Sync/geospatial_R/michigan_fishing/Michigan_DNR_Fishing_Access_Sites.shp",proj4string = CRS("+proj=omerc +lat_0=45.30916666666666 +lonc=-86 +alpha=337.25556 +k=0.9996 +x_0=2546731.496 +y_0=-4354009.816 +no_uoff +gamma=337.25556 +ellps=GRS80 +units=m +no_defs"))
+plot(fishing)
+fishing2 <- spTransform(fishing, CRS("+proj=longlat +datum=WGS84"))
+fishing2@bbox
+fishing2 <- spTransform(fishing, CRS("+proj=longlat +ellps=GRS80"))
+fishing2@bbox
+summary(fishing2)
+fishing
+fishing2
+wells <- readShapeSpatial("Box Sync/geospatial_R/Washtenaw_WaterWells.shp")
+wells <- readShapeSpatial("Box Sync/geospatial_R/Washtenaw_WaterWells/Washenaw_WaterWells.shp")
+wells <- readShapeSpatial("Box Sync/geospatial_R/Washtenaw_WaterWells/Washtenaw_WaterWells.shp")
+wells
+plot(michigan)
+plot(wells)
+plot(michigan)
+point(wells)
+points(wells)
+plot(michigan)
+points(wells,cex=.2,pch=20)
+points(wells,cex=.1,pch=20)
+bridges <- readShapePoints("Box Sync/geospatial_R/Michigan_Bridges/Michigan_DNR_Managed_Bridges.shp",proj4string = CRS("+proj=omerc +lat_0=45.30916666666666 +lonc=-86 +alpha=337.25556 +k=0.9996 +x_0=2546731.496 +y_0=-4354009.816 +no_uoff +gamma=337.25556 +ellps=GRS80 +units=m +no_defs"))
+bridges
+proj4string(bridges)
+bridges2 <- spTransform(bridges, CRS("+proj=longlat +ellps=GRS80"))
+bridges
+bridges2
+EPSG[grep("michigan", EPSG$note, ignore.case=TRUE), 1:2]
+EPSG[grep("michigan", EPSG$note, ignore.case=TRUE), 1:5]
+EPSG[grep("michigan", EPSG$note, ignore.case=TRUE), 1:3]
+proj4string(bridges)
+bridges <- readShapePoints("Box Sync/geospatial_R/Michigan_Bridges/Michigan_DNR_Managed_Bridges.shp",proj4string = CRS("+proj=omerc +lat_0=45.309166667 +lonc=-86.0 +alpha=337.255555556 +k=0.9996 +x_0=2546731.496 +y_0=-4354009.816 +ellps=GRS80 +datum=NAD83"))#
++units=m"))
+bridges <- readShapePoints("Box Sync/geospatial_R/Michigan_Bridges/Michigan_DNR_Managed_Bridges.shp",proj4string = CRS("+proj=omerc +lat_0=45.309166667 +lonc=-86.0 +alpha=337.255555556 +k=0.9996 +x_0=2546731.496 +y_0=-4354009.816 +ellps=GRS80 +datum=NAD83 +units=m"))
+bridges
+bridges2 <- spTransform(bridges, CRS("+proj=longlat +ellps=GRS80"))
+bridges
+bridges2
+plot(bridges2)
+lines(michigan)
+plot(michigan)
+points(bridges)
+points(bridges2)
+?readShapePoints
+plot(michigan)
+points(bridges2,cex=.5, pch=20, col="red")
+point.in.polygon(bridges2,michigan)
+?over
+over(bridges2, michigan)
+proj4string(michigan)
+proj4string(bridges2)
+proj4string(michigan) <- "+proj=longlat +ellps=GRS80"
+proj4string(bridges2)
+proj4string(michigan)
+over(bridges2, michigan)
+bridges2
+over(michigan,bridges2)
+library(tm)
+stopwords("en")
+dat <- read.csv(file.choose())
+head(dat)
+library(reshape)
+dat <- read.csv(file.choose())
+themes <- dat[1:7]
+disc <-dat[c(1,8:12)]
+disc
+head(disc)
+themes_long <- melt(themes, id.vars="work_name")
+head(themes_long)
+write.csv(thems_long, "Desktop/themes_long.csv")
+write.csv(themes_long, "Desktop/themes_long.csv")
+disc_long <- melt(disc, id.vars="work_name")
+write.csv(disc_long, "Desktop/disc_long.csv")
+library("parallel"
+)
+lapply(1:500, mean)
+x <- lapply(1:10,sqr)
+x <- lapply(1:10,mean)
+x <- mclapply(1:10,mean)
+x
+x = 1:10
+for y in x{
+x
+y = rbind(x,y)
+if(exists(y)){print("yes")}
+if(exists("y")){print("yes")}
+if(exists("y")){print("yes")}
+y = 10
+if(exists("y")){print("yes")}
+rm(y)
+if(exists("y")){print("yes")}
+getwd()
+setwd("/Users/joque/Desktop/flux_r-master/flux_r")
+library(rgdal)
+c <- readOGR('/shapefiles/','tabblock2010_50_pophu.shp')
+c <- readOGR('shapefiles/','tabblock2010_50_pophu.shp')
+c <- readOGR('shapefiles','tabblock2010_50_pophu.shp')
+c <- readOGR(layer='shapefiles/tabblock2010_50_pophu.shp')
+?readOGR
+c <- readOGR('shapefiles','tabblock2010_50_pophu')
+chold <- c[1:10,]
+plot(chold)

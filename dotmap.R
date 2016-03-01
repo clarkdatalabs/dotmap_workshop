@@ -51,7 +51,7 @@ print("End shape file processing")
 print(shape_time)
 
 ## Draw tiles
-zoomlevels = c(2:5)
+zoomlevels = c(2:14)
 for (i in zoomlevels){
   	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
   	quadlevel = unique(quad.coord$quadzoom)

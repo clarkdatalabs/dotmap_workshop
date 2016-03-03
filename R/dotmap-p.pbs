@@ -1,0 +1,46 @@
+#!/bin/bash
+#### Begin PBS preamble
+
+#PBS -N dotmap-mpi
+#PBS -M <your uniqname>@umich.edu
+#PBS -m ae
+
+#PBS -l nodes=2:ppn=4,pmem=2gb,walltime=4:00:00
+
+#PBS -j oe
+#PBS -V
+
+#PBS -A <your account>_flux
+#PBS -l qos=flux
+#PBS -q flux
+
+#### End PBS preamble
+
+#### Job Setup
+#### Modules needed for this job to run successfully
+# module load lsa gcc/4.4.7 geos gdal proj4 Rmpi
+#
+# also needed
+# This suppresses a warning from MPI
+export OMPI_MCA_mpi_warn_on_fork=0
+# Make the Rgeo libraries available
+export R_LIBS_USER=/usr/cac/rhel6/Rgeo/3.2.2
+
+if [ -e "${PBS_NODEFILE}" ] ; then
+    uniq -c $PBS_NODEFILE
+fi
+
+if [ -d "${PBS_O_WORKDIR}" ] ; then
+    cd $PBS_O_WORKDIR
+fi
+
+echo "Working from $(pwd)"
+
+#  Job Run
+
+#  With the built-in cluster management, we start on one processor
+#  and spawn the others separately.  This means that, if you request
+#  N processors from PBS, N-1 will be available to do parallel work in R.
+
+mpirun -np 1 R CMD BATCH --no-save --no-restore dotmap-p.R
+

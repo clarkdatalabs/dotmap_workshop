@@ -1,0 +1,12 @@
+# Make the Rgeo libraries available
+export R_LIBS_USER=/usr/cac/rhel6/Rgeo/3.2.2
+# Load all the supporting software that is required
+module load lsa gcc/4.4.7 geos gdal proj4 Rmpi
+module list
+echo R user library path is:  $R_LIBS_USER
+
+# Submit the serial job using this
+# qsub dotmap.pbs
+
+# Submit the multicore job using this
+# qsub dotmap-mc.pbs

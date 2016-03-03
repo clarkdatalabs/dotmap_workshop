@@ -13,7 +13,7 @@ source("globalmaptiles.R")
 ## Set the maximum zoom level
 zoom = 14;
 
-## Read shape, output data with coordinates and quadkey reference 
+## Read shape, output data with coordinates and quadkey reference
 # Convert coordinates to quadkey
 shape= readShapeSpatial("vermont/tabblock2010_50_pophu.shp")
 # Take a sample for quick testing
@@ -23,11 +23,11 @@ shape= readShapeSpatial("vermont/tabblock2010_50_pophu.shp")
 coords= totalcoordstate(shape);
 
 ## Convert to Tiles
-meters= coordstoMeters(coords, origin.shift); 
+meters= coordstoMeters(coords, origin.shift);
 pixels= meterstoPixels(meters, zoom, origin.shift);
 tiles= pixelstoTiles(pixels, tile.size);
 
-## Convert to Microso Quadkey
+## Convert to Microsoft Quadkey
 quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
 
 ## Combine meter coordinates with quadkey values
@@ -53,4 +53,3 @@ end_tiles = Sys.time()
 tile_time = end_tiles - end_shape
 print("End tile creation")
 print(tile_time)
-

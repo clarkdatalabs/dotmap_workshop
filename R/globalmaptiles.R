@@ -7,7 +7,6 @@ library("Cairo")
 
 #Dot Map Project in R
 # an R implementation of https://github.com/unorthodox123/RacialDotMap
-# created by: Soon Ju Kim and Justin Joque, University of Michigan
 
 # ***** means possible parallelization
 

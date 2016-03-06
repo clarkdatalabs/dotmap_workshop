@@ -16,6 +16,8 @@ zoom = 14;
 ## Read shape, output data with coordinates and quadkey reference
 # Convert coordinates to quadkey
 print("Reading in shapefiles")
+
+# Create a vector of the FIPS codes
 states = c(33,50)
 
 for (state in states){

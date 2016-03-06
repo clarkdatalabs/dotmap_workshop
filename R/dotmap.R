@@ -4,6 +4,7 @@
 # corresponding quadkey ref.
 # 2. Function to draw out tiles according to the data output from 1
 # an R implementation of https://github.com/unorthodox123/RacialDotMap
+# created by: Soon Ju Kim and Justin Joque, University of Michigan
 
 begin = Sys.time()
 ## Source global map tiles functions, includes library load statements
@@ -30,7 +31,7 @@ for (state in states){
 	pixels= meterstoPixels(meters, zoom, origin.shift);
 	tiles= pixelstoTiles(pixels, tile.size);
 
-	## Convert to Microso Quadkey
+	## Convert to Microsoft Quadkey
 	quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
 
 	## Combine meter coordinates with quadkey values

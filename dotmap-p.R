@@ -47,6 +47,9 @@ print(shape_time)
 cl <- makeCluster(mpi.universe.size()-1, "MPI")
 clusterCall(cl, function() Sys.info()[c("nodename","machine")])
 clusterCall(cl, function() source("globalmaptiles.R"))
+# This is an alternative to the above cluster call that doesn't require
+#   the anonymous function definition.
+# clusterEvalQ(cl, source("globalmaptiles.R"))
 clusterExport(cl, list("quad.coord"))
 
 ## Draw tiles

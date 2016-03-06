@@ -6,7 +6,11 @@
 # an R implementation of https://github.com/unorthodox123/RacialDotMap
 # created by: Soon Ju Kim and Justin Joque, University of Michigan
 
-## load library
+begin = Sys.time()
+## Source global map tiles functions, includes library load statements
+source("globalmaptiles.R")
+
+## Parallel setup:  load library
 library(parallel)
 
 # For multicore, get number of cores from PBS or set manually
@@ -14,32 +18,42 @@ library(parallel)
 NP = 10
 options(mc.cores=NP)
 
-begin = Sys.time()
-## Source global map tiles functions, includes library load statements
-source("globalmaptiles.R")
-
 ## Set the maximum zoom level
 zoom = 14;
 
-## Read shape, output data with coordinates and quadkey reference 
+## Read shape, output data with coordinates and quadkey reference
 # Convert coordinates to quadkey
-shape= readShapeSpatial("vermont/tabblock2010_50_pophu.shp")
-# Take a sample for quick testing
-# shape= shape[1:100,];
+print("Reading in shapefiles")
 
-## Obtain Coordinates
-coords= totalcoordstate(shape);
+# Create a vector of the FIPS codes
+states = c(33,50)
 
-## Convert to Tiles
-meters= coordstoMeters(coords, origin.shift); 
-pixels= meterstoPixels(meters, zoom, origin.shift);
-tiles= pixelstoTiles(pixels, tile.size);
- 
-## Convert to Microso Quadkey
-quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
+for (state in states){
+	shape= readOGR('shapefiles',paste("tabblock2010_",state,"_pophu",sep=""))
+	# Take a sample for quick testing
+	# shape= shape[1:100,];
+	
+	## Obtain Coordinates
+	coords= totalcoordstate(shape);
+	
+	## Convert to Tiles
+	meters= coordstoMeters(coords, origin.shift);
+	pixels= meterstoPixels(meters, zoom, origin.shift);
+	tiles= pixelstoTiles(pixels, tile.size);
+	 
+	## Convert to Microsoft Quadkey
+	quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
+	
+	## Combine meter coordinates with quadkey values
+	quad.hold= data.frame(quadkey, meters$mx, meters$my)
+	if(exists("quad.coord")){
+		quad.coord = rbind(quad.hold,quad.coord)
+	}else{
+		quad.coord = quad.hold
+	}
+	rm(quad.hold)
+}
 
-## Combine meter coordinates with quadkey values
-quad.coord= data.frame(quadkey, meters$mx, meters$my)
 
 ## Print time for processing shape file(s)
 end_shape = Sys.time()

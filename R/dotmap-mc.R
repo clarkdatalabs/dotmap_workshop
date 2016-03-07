@@ -15,7 +15,7 @@ library(parallel)
 
 # For multicore, get number of cores from PBS or set manually
 # NP = as.numeric(Sys.getenv('PBS_NP'))
-NP = 10
+NP = 4
 options(mc.cores=NP)
 
 ## Set the maximum zoom level

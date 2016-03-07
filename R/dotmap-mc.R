@@ -29,29 +29,29 @@ print("Reading in shapefiles")
 states = c(33,50)
 
 for (state in states){
-	shape= readOGR('shapefiles',paste("tabblock2010_",state,"_pophu",sep=""))
-	# Take a sample for quick testing
-	# shape= shape[1:100,];
-	
-	## Obtain Coordinates
-	coords= totalcoordstate(shape);
-	
-	## Convert to Tiles
-	meters= coordstoMeters(coords, origin.shift);
-	pixels= meterstoPixels(meters, zoom, origin.shift);
-	tiles= pixelstoTiles(pixels, tile.size);
-	 
-	## Convert to Microsoft Quadkey
-	quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
-	
-	## Combine meter coordinates with quadkey values
-	quad.hold= data.frame(quadkey, meters$mx, meters$my)
-	if(exists("quad.coord")){
-		quad.coord = rbind(quad.hold,quad.coord)
-	}else{
-		quad.coord = quad.hold
-	}
-	rm(quad.hold)
+    shape= readOGR('shapefiles',paste("tabblock2010_",state,"_pophu",sep=""))
+    # Take a sample for quick testing
+    # shape= shape[1:100,];
+
+    ## Obtain Coordinates
+    coords= totalcoordstate(shape);
+
+    ## Convert to Tiles
+    meters= coordstoMeters(coords, origin.shift);
+    pixels= meterstoPixels(meters, zoom, origin.shift);
+    tiles= pixelstoTiles(pixels, tile.size);
+     
+    ## Convert to Microsoft Quadkey
+    quadkey= apply(tiles, 1, tilestoQuadkey, zoom= zoom)
+
+    ## Combine meter coordinates with quadkey values
+    quad.hold= data.frame(quadkey, meters$mx, meters$my)
+    if(exists("quad.coord")){
+        quad.coord = rbind(quad.hold,quad.coord)
+    }else{
+        quad.coord = quad.hold
+    }
+    rm(quad.hold)
 }
 
 
@@ -64,10 +64,10 @@ print(shape_time)
 ## Draw tiles
 zoomlevels = c(2:14)
 for (i in zoomlevels){
-  	quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
-  	quadlevel = unique(quad.coord$quadzoom)
-  	print(i)
-  	mclapply(quadlevel,draw.tile)
+      quad.coord$quadzoom = substring(quad.coord$quadkey,1,i)
+      quadlevel = unique(quad.coord$quadzoom)
+      print(i)
+      mclapply(quadlevel,draw.tile)
 }
 
 ## Print tile creation time

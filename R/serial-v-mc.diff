@@ -1,0 +1,17 @@
+12a13,20
+> ## Parallel setup:  load library
+> library(parallel)
+> 
+> # For multicore, get number of cores from PBS or set manually
+> # NP = as.numeric(Sys.getenv('PBS_NP'))
+> NP = 4
+> options(mc.cores=NP)
+> 
+48a57
+> 
+61c70
+<       lapply(quadlevel,draw.tile)
+---
+>       mclapply(quadlevel,draw.tile)
+68a78
+> 

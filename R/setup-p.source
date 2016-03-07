@@ -3,7 +3,7 @@ export OMPI_MCA_mpi_warn_on_fork=0
 # Make the Rgeo libraries available
 export R_LIBS_USER=/usr/cac/rhel6/Rgeo/3.2.2
 # Load all the supporting software that is required
-module load lsa gcc/4.4.7 geos gdal proj4 Rmpi
+module load lsa gcc/4.4.7 geos/3.4.2 gdal/2.0.2 proj4/4.9.1 Rmpi/R-3.2.2/0.6-5
 module list
 echo OMPI_MCA_mpi_warn_on_fork is $OMPI_MCA_mpi_warn_on_fork
 echo R user library path is:  $R_LIBS_USER

@@ -1,9 +1,12 @@
+# Remove default compiler, gcc, and openmpi to prevent conflict
+module rm intel-comp gcc openmpi
 # Make the Rgeo libraries available
 export R_LIBS_USER=/usr/cac/rhel6/Rgeo/3.2.2
 # Load all the supporting software that is required
-module load lsa gcc/4.4.7 geos gdal proj4 Rmpi
+# Use version numbers for replicability
+module load lsa gcc/4.4.7 geos/3.4.2 gdal/2.0.2 proj4/4.9.1 R/3.2.2
 module list
-echo R user library path is:  $R_LIBS_USER
+echo "R user library path is:  $R_LIBS_USER"
 
 # Submit the serial job using this
 # qsub dotmap.pbs

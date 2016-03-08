@@ -23,10 +23,8 @@ max_blocks = float(350e3)
 # Read the FIPS codes from a file
 with open('states.txt', 'r') as states_file:
     FIPS = [line.strip() for line in states_file]
-states_file.close()
 
 # Override the full fips code list for shorter processing
-
 FIPS = [6]
 FIPS = [str(x).zfill(2) for x in FIPS]
 

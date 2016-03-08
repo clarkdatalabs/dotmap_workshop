@@ -13,6 +13,8 @@ from shapely.wkb import loads
 from shapely.geometry import Point
 import createtile as tile
 from globalmaptiles import GlobalMercator
+from mpi4py import MPI # line 1
+import numpy as np
 
 #%% Phase 1: Generate People
 
@@ -23,7 +25,7 @@ t0 = time.time()
 lowerzoom = 3
 upperzoom = 13
 
-shortcut = False
+shortcut = True
 
 if not shortcut:
     merc = GlobalMercator()
@@ -92,7 +94,9 @@ print("{} people took {:.1f}s".format(data.shape[0],t2-t0))
 # create a range of descending zoomlevels 
 zoomlevels = range(upperzoom,lowerzoom,-1)
 # track number of tiles
-N = 0
+N = np.zeros(1)
+# create a communicator
+comm = MPI.COMM_WORLD # line 2
 # loop through zoom levels
 for j in range(len(zoomlevels)):
     level = zoomlevels[j]
@@ -103,14 +107,20 @@ for j in range(len(zoomlevels)):
     # get list of unique quadkeys and length
     quadtree = data['quadkey'].unique()
     n = len(quadtree)
+    count = 0
     # loop through quadkeys
-    for i in range(n):
+    for i in range(comm.rank, n, comm.size):  # line 3
         quadkey = quadtree[i]
         # generate tile function
         tile.generate_tile(groups.get_group(quadkey), quadkey, level)
+        count += 1        
     # keep count of tiles
-    N += n
+    N += count
 
+total = np.zeros(1)
+comm.Reduce(N, total, op=MPI.SUM, root=0)
 t3 = time.time()
-print("Creating {} png files took {:.1f}s".format(N,t3-t2))
-print("Total time {:.1f}".format(t3-t0))
+print("Rank {} created {} png files".format(comm.rank,N))
+print("Rank {} total tiles = {} took {:.1f}s".format(comm.rank,total,t3-t2))
+if comm.rank == 0:
+    print("Total time {:.1f}".format(t3-t0))
